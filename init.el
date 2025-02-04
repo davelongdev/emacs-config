@@ -78,16 +78,18 @@
   (evil-collection-init))
 
 ;; erc settings for irc
-(setq erc-server "irc.libera.chat"
-      erc-nick "dldev"
-      erc-user-full-name "Dave Long"
+(setq erc-server "irc.libera.chat" ; set irc server
+      erc-nick "dldev" ; set irc nickname
+      erc-user-full-name "Dave Long" ; set irc full name
       erc-track-shorten-start 8
-      ; erc-autojoin-channels-alist '(("irc.libera.chat" "#systemcrafters"))
       erc-kill-buffer-on-part t
       erc-auto-query 'bury
+      erc-fill-column 120)
       ; erc-default-server '("irc.libera.chat" :port 6667 :channels '("#emacs")))
+      ; erc-autojoin-channels-alist '(("irc.libera.chat" "#systemcrafters"))
 (setq erc-autojoin-channels-alist
       '(("Libera.Chat" "#emacs" "#erc" "#systemcrafters")))
+(setq erc-hide-list '("JOIN" "PART" "QUIT"))
 
 ;; themes
 (use-package gruvbox-theme)
@@ -111,5 +113,36 @@
 
 ;; rainbow delimiters for matching color parens
 
-(use-package rainbow-delimiter
+(use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
+
+;; add icon support
+(use-package all-the-icons)
+
+;; doom mode line 
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :custom ((doom-modeline-height 15)))
+
+;; Make ESC quit prompts
+;; (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                shell-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+;; set leader keys
+(evil-set-leader nil (kbd "SPC"))
+(evil-set-leader 'normal (kbd "SPC"));; set local leader
+(evil-set-leader 'normal (kbd "SPC"));; set local leader
+
+;; normal mode bindings
+(evil-define-key '(normal visual motion emacs) 'global (kbd "<leader>m") 'kill-this-buffer)
+(evil-define-key '(normal visual motion emacs) 'global (kbd "<leader>h") 'previous-buffer)
+(evil-define-key '(normal visual motion emacs) 'global (kbd "<leader>l") 'next-buffer)
+(evil-define-key '(normal visual motion emacs) 'global (kbd "<leader>e") 'erc-tls)
+(evil-define-key '(normal visual motion emacs) 'global (kbd "<leader>i")
+  '(lambda () (interactive) (find-file user-init-file)))
